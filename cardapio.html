@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seu Batata - Delivery</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(145deg, #0d0d0d, #1a1a1a);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: linear-gradient(to right, #f90, #f33);
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+    header img {
+      max-width: 180px;
+      filter: drop-shadow(0 0 10px #f90);
+    }
+    .container {
+      padding: 1rem;
+      max-width: 700px;
+      margin: auto;
+    }
+    h2 {
+      border-bottom: 2px solid #f90;
+      padding-bottom: 0.3rem;
+      margin-top: 2rem;
+    }
+    .item {
+      background: #222;
+      border-radius: 10px;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.6);
+      margin: 0.5rem 0;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .item:hover {
+      background-color: #2c2c2c;
+      transform: scale(1.01);
+    }
+    #carrinho {
+      margin-top: 2rem;
+      background-color: #111;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 2px 2px 12px rgba(0,0,0,0.6);
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #333;
+    }
+    li span.remove {
+      color: #f33;
+      cursor: pointer;
+      margin-left: 1rem;
+    }
+    input, select, button, textarea {
+      margin: 0.5rem 0;
+      padding: 0.7rem;
+      width: 100%;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+    textarea {
+      resize: vertical;
+    }
+    button {
+      background: #f90;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #fb0;
+    }
+    .total {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: right;
+      margin-top: 1rem;
+    }
+    @media (max-width: 600px) {
+      .item, li {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .splash-screen img {
+      max-width: 300px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .main-content {
+      display: none;
+    }
+
+  </style>
+</head>
+<body>
+  
+  
+
+  <header>
+    <img src="https://i.imgur.com/cBqz6Iy.png" alt="Seu Batata Logo">
+  </header>
+  <div class="container">
+    <h2>Batatas Recheadas</h2>
+    <div class="item" onclick="addItem('Carne Seca', 35.90)">Carne Seca - R$35,90</div>
+    <div class="item" onclick="addItem('Strogonoff de Carne', 34.90)">Strogonoff de Carne - R$34,90</div>
+    <div class="item" onclick="addItem('Strogonoff de Frango', 33.90)">Strogonoff de Frango - R$33,90</div>
+    <div class="item" onclick="addItem('Frango Cremoso', 34.90)">Frango Cremoso - R$34,90</div>
+    <div class="item" onclick="addItem('Queijo e Bacon', 32.90)">Queijo e Bacon - R$32,90</div>
+    <div class="item" onclick="addItem('Cheddar e Calabresa', 32.90)">Cheddar e Calabresa - R$32,90</div>
+    <div class="item" onclick="addItem('Vegetariana', 34.90)">Vegetariana - R$34,90</div>
+
+    <h2>Bebidas</h2>
+    <div class="item" onclick="addItem('Coca-Cola Lata 350ml', 6.50)">Coca-Cola Lata 350ml - R$6,50</div>
+    <div class="item" onclick="addItem('Guaraná Lata 350ml', 6.50)">Guaraná Lata 350ml - R$6,50</div>
+    <div class="item" onclick="addItem('Coca-Cola 2L', 15.00)">Coca-Cola 2L - R$15,00</div>
+    <div class="item" onclick="addItem('Guaraná 2L', 15.00)">Guaraná 2L - R$15,00</div>
+
+    <h2>Adicionais</h2>
+    <div class="item" onclick="addItem('Catupiry', 2.00)">Catupiry - R$2,00</div>
+    <div class="item" onclick="addItem('Batata Palha', 3.00)">Batata Palha - R$3,00</div>
+    <div class="item" onclick="addItem('Muçarela', 3.00)">Muçarela - R$3,00</div>
+    <div class="item" onclick="addItem('Bacon', 4.00)">Bacon - R$4,00</div>
+
+    <div id="carrinho">
+      <h2>Seu Pedido</h2>
+      <ul id="itens"></ul>
+      <div class="total">Total: R$<span id="total">0.00</span></div>
+      <textarea id="observacao" placeholder="Alguma observação? (ex: sem catupiry, sem Bacon...)"></textarea>
+      <input type="text" id="nome" placeholder="Seu nome">
+      <input type="text" id="endereco" placeholder="Endereço">
+      <input type="tel" id="telefone" placeholder="WhatsApp">
+      <select id="pagamento">
+        <option disabled selected>Forma de pagamento</option>
+        <option>Dinheiro</option>
+        <option>Cartão</option>
+        <option>Pix</option>
+      </select>
+      <button onclick="finalizarPedido()">Finalizar Pedido via WhatsApp</button>
+    </div>
+  </div>
+
+  <script>
+    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+    function addItem(nome, preco) {
+      let qtd = prompt(`Quantas unidades de "${nome}" você deseja?`, 1);
+      if (!qtd || isNaN(qtd) || qtd <= 0) return;
+      qtd = parseInt(qtd);
+
+      carrinho.push({ nome, preco, qtd });
+      atualizarCarrinho();
+
+    
+
+    }
+
+    function removerItem(index) {
+      carrinho.splice(index, 1);
+      atualizarCarrinho();
+
+    
+
+    }
+
+    function atualizarCarrinho() {
+      localStorage.setItem('carrinho', JSON.stringify(carrinho));
+      const ul = document.getElementById('itens');
+      ul.innerHTML = '';
+      let total = 0;
+      carrinho.forEach((item, i) => {
+        let subtotal = item.preco * item.qtd;
+        total += subtotal;
+        const li = document.createElement('li');
+        li.innerHTML = `${item.nome} (x${item.qtd}) - R$${subtotal.toFixed(2)} <span class='remove' onclick='removerItem(${i})'>&times;</span>`;
+        ul.appendChild(li);
+      });
+      document.getElementById('total').textContent = total.toFixed(2);
+    }
+
+    function finalizarPedido() {
+      const nome = document.getElementById('nome').value.trim();
+      const endereco = document.getElementById('endereco').value.trim();
+      const telefone = document.getElementById('telefone').value.trim();
+      const pagamento = document.getElementById('pagamento').value;
+      const observacao = document.getElementById('observacao').value.trim();
+
+      if (!nome || !endereco || !telefone || !pagamento) {
+        alert('Por favor, preencha todos os campos e escolha a forma de pagamento.');
+        return;
+      }
+
+      if (!confirm('Deseja realmente enviar este pedido via WhatsApp?')) return;
+
+      let texto = `Pedido de ${nome}%0AEndereço: ${endereco}%0ATelefone: ${telefone}%0APagamento: ${pagamento}%0A\n`;
+      carrinho.forEach((item) => {
+        texto += `• ${item.nome} (x${item.qtd}) - R$${(item.preco * item.qtd).toFixed(2)}%0A`;
+      });
+      texto += `\nTotal: R$${document.getElementById('total').textContent}`;
+      if (observacao) texto += `%0AObs: ${observacao}`;
+
+      let contagem = localStorage.getItem(telefone);
+      contagem = contagem ? parseInt(contagem) + 1 : 1;
+      localStorage.setItem(telefone, contagem);
+      texto += `%0A(Pedido nº ${contagem} deste número)`;
+
+      window.open(`https://wa.me/5567993427337?text=${texto}`, '_blank');
+    }
+
+    atualizarCarrinho();
+
+    
+
+  </script>
+</body>
+</html>
